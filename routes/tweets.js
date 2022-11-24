@@ -69,10 +69,21 @@ router.get('/hashtag/:hashtag', async (req, res) => {
         res.json({ result: false, error: 'No tweet for this hashtag' });
 });
 
-// GET: Find the 10 first hashtags with the more tweets
+// GET: Find the 
+const numberOfTrends = 10; // first hashtags with the more tweets
 // Response: result, length, hashtags (hashtags sorted by popularity)
-router.get('/trends', (req, res) => {
-    res.json({});
+router.get('/trends', async (req, res) => {
+    const allTweets = await Tweet.find();
+    if (allTweets[0]) {
+        const allHashtags = allTweets.map(tweet => tweet.hashtags).flat().sort();
+        const allHashtagsStr = allHashtags.join('');
+        let trends = [...new Set(allHashtags)].map(hashtag => {
+            return {hashtag, count:allHashtagsStr.match(new RegExp(hashtag, 'g')).length};
+        });
+        trends = trends.sort((a, b) => b.count - a.count).slice(0, numberOfTrends);
+    
+        res.json({result: true, trends});    
+    } else res.json({ result: false, error: 'No tweet' });
 });
 
 module.exports = router;
