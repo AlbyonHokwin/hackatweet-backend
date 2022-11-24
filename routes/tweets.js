@@ -35,8 +35,19 @@ router.post('/new', async (req, res) => {
 
 // DELETE: allow to delete a message from DB
 // Response: result
-router.delete('/delete', (req, res) => {
-    res.json({});
+router.delete('/delete', async (req, res) => {
+    if (checkBody(req.body, ['date', 'token'])) {
+        const { date, token } = req.body;
+        const foundUser = await User.findOne({ token });
+
+        if (foundUser) {
+            const foundTweet = await Tweet.findOneAndDelete({ date: new Date(date), user: foundUser._id });
+
+            if (foundTweet) {
+                res.json({ result: true });
+            } else res.json({ result: false, error: 'Message not found' });
+        } else res.json({ result: false, error: 'User not found' });
+    } else res.json({ result: false, error: 'Missong or empty fields' });
 });
 
 // GET: take the last 20 tweets
