@@ -23,7 +23,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/user', usersRouter);
-app.use('/tweet', tweetsRouter);
+app.use('/users', usersRouter);
+app.use('/tweets', tweetsRouter);
 
 module.exports = app;

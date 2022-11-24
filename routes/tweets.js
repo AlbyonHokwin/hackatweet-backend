@@ -32,4 +32,4 @@ router.get('/trends', (req, res) => {
     res.json({});
 });
   
-module.export = router;
+module.exports = router;
