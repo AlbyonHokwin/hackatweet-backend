@@ -24,9 +24,7 @@ router.post('/signup', async (req, res) => {
 
       try {
         const savedUser = await newUser.save();
-        savedUser ?
-          res.json({ result: true, token: savedUser.token }) :
-          res.json({ result: false });
+        res.json({ result: true, token: savedUser.token });
       } catch (error) {
         res.json({ result: false, error });
       }
@@ -53,9 +51,9 @@ router.post('/signin', async (req, res) => {
 // Response: result
 router.get('/:token', async (req, res) => {
   const foundUser = await User.findOne({ token: req.params.token });
-  
+
   if (foundUser) res.json({ result: true });
-  else res.json({ result: false, error: 'User not found'});
+  else res.json({ result: false, error: 'User not found' });
 });
 
 module.exports = router;
