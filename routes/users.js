@@ -33,14 +33,14 @@ router.post('/signup', async (req, res) => {
 });
 
 // POST: allow to find a new user to DB
-// Response: result, token
+// Response: result, token, firstname
 router.post('/signin', async (req, res) => {
   if (checkBody(req.body, ['username', 'password'])) {
     const { username, password } = req.body;
     const foundUser = await User.findOne({ username });
 
     if (foundUser && bcrypt.compareSync(password, foundUser.password)) {
-      res.json({ result: true, token: foundUser.token });
+      res.json({ result: true, token: foundUser.token, firstname: foundUser.firstname });
     } else {
       res.json({ result: false, error: 'User not found or wrong password' });
     }
