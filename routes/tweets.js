@@ -54,7 +54,7 @@ router.delete('/delete', async (req, res) => {
 const numOfLast = 20; // tweets
 // Response: result, tweets (tweets sorted by date from more recent)
 router.get('/lasts', async (req, res) => {
-    const tweets = await Tweet.find().sort({ date: -1 });
+    const tweets = await Tweet.find().sort({ date: -1 }).populate('user');
     tweets[0] ?
         res.json({ result: true, tweets: tweets.slice(0, numOfLast) }) :
         res.json({ result: false, error: 'No Tweet' });
@@ -63,7 +63,7 @@ router.get('/lasts', async (req, res) => {
 // GET: Find tweets with the hashtag in parameter
 // Response: result, tweets (tweets sorted by date from more recent)
 router.get('/hashtag/:hashtag', async (req, res) => {
-    const tweets = await Tweet.find({ hashtags: { $in: req.params.hashtag } });
+    const tweets = await Tweet.find({ hashtags: { $in: req.params.hashtag } }).populate('user');
     tweets[0] ?
         res.json({ result: true, tweets }) :
         res.json({ result: false, error: 'No tweet for this hashtag' });
