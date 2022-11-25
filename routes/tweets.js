@@ -70,7 +70,7 @@ router.get('/lasts/:token?', async (req, res) => {
 
 // GET: Find tweets with the hashtag in parameter
 // Response: result, tweets (tweets sorted by date from more recent)
-router.get('/hashtag/:hashtag', async (req, res) => {
+router.get('/hashtag/:hashtag/:token?', async (req, res) => {
     const foundTweets = await Tweet.find({ hashtags: { $in: req.params.hashtag } }).populate('user');
 
     const tweets = foundTweets.map(tweet => {
@@ -81,7 +81,7 @@ router.get('/hashtag/:hashtag', async (req, res) => {
     })
 
     tweets[0] ?
-        res.json({ result: true, tweets }) :
+        res.json({ result: true, tweets }):
         res.json({ result: false, error: 'No tweet for this hashtag' });
 });
 
